@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Baby, Droplets, ThermometerSun, Battery, Wifi, RefreshCw, Bell } from "lucide-react";
+import { Baby, Droplets, ThermometerSun, Battery, Wifi, RefreshCw, Bell, RotateCcw } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 type DiaperStatus = "dry" | "wet" | "soiled" | "both";
@@ -13,6 +13,7 @@ interface DeviceData {
   gas_level: number;
   temperature: number;
   battery: number;
+  position: "back" | "stomach" | "left_side" | "right_side";
   lastUpdated: Date;
 }
 
@@ -25,6 +26,7 @@ const Dashboard = () => {
     gas_level: 0,
     temperature: 36.5,
     battery: 100,
+    position: "back",
     lastUpdated: new Date(),
   });
 
@@ -131,6 +133,26 @@ const Dashboard = () => {
             <p className="text-sm text-muted-foreground mb-1">Gas Level</p>
             <p className="text-2xl font-bold text-foreground">{deviceData.gas_level}%</p>
           </div>
+        </div>
+      </Card>
+
+      {/* Position Card */}
+      <Card className="p-4 mb-6 bg-card/50 backdrop-blur shadow-[var(--shadow-card)] border-border/50">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="bg-accent/10 p-2.5 rounded-xl">
+              <RotateCcw className="w-5 h-5 text-accent" />
+            </div>
+            <div>
+              <p className="text-sm font-medium text-muted-foreground">Baby Position</p>
+              <p className="text-xl font-bold text-foreground capitalize">
+                {deviceData.position.replace("_", " ")}
+              </p>
+            </div>
+          </div>
+          <Badge variant={deviceData.position === "stomach" ? "destructive" : "default"} className="rounded-full">
+            {deviceData.position === "stomach" ? "⚠️ Alert" : "✓ Safe"}
+          </Badge>
         </div>
       </Card>
 
